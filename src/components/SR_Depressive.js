@@ -4,16 +4,15 @@ import React from "react";
 import GenderSelector from "./GenderSelector";
 import YearSelector from "./YearSelector";
 import LineChart from "./LineChart";
-import Map from "./Map";
-import SR_by_Sex_Dataset from "../data/suicide-death-rates-by-sex-who.csv";
+import MultivariateMap from "./MultivariateMap";
+import SR_against_Depressive_Dataset from "../data/suicide-rates-vs-prevalence-of-depression.csv";
 
 // import SR_vs_Income_Inequality_Dataset from "./data/suicide-rate-vs-income-inequality.csv";
 
-function SR_By_Sex(props) {
+function SR_Depressive(props) {
 
     const [data, setData] = React.useState([]);
     const [filteredData, setFilteredData] = React.useState([]);
-    const [selectedSex, setSelectedSex] = React.useState("Male");
 
     const [minYear, setMinYear] = React.useState(2000);
     const [maxYear, setMaxYear] = React.useState(2000);
@@ -23,21 +22,19 @@ function SR_By_Sex(props) {
 
     const [selectedCountry, setSelectedCountry] = React.useState("");
     const [countrySpecificData, setCountrySpecificData] = React.useState([]);
-
     
     // When a user selection changes, update filtered data
     React.useEffect(() => {
         setFilteredData(
             data.filter(
                 (row) => row["Year"] === selectedYear.toString()
-                && row["Gender"] === selectedSex
             )
         );
-    }, [selectedYear, selectedSex]);
+    }, [selectedYear]);
 
     // On load
     React.useEffect(() => {
-        d3.csv(SR_by_Sex_Dataset).then((d) => {
+        d3.csv(SR_against_Depressive_Dataset).then((d) => {
 
             setData(d);
             setSelectedYear(selectedYear - 1);  // Just to trigger the above change, non-manually
@@ -65,43 +62,23 @@ function SR_By_Sex(props) {
 
     return (
         <>
-            <h4>{`Suicide Rates of ${selectedSex}s 
-                ${selectedCountry === "" ? "around the world" : "in " + selectedCountry}`}</h4>
-            <hr />
-            {
-                selectedCountry !== "" && countrySpecificData.length > 0 &&
-                (
-                    <>
-                    <br />
-                        <LineChart
-                            defaultSettings={{width: 900, height: 200}}
-                            data={countrySpecificData} 
-                            selectedCol={selectedSex}
-                            selectedColColName="Gender" />
-                    </>
-                )
-            }
-            <GenderSelector selectedSex={selectedSex} setSelectedSex={setSelectedSex} />
-            <YearSelector minYear={minYear} maxYear={maxYear} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
-            <div style={{"overflow": "auto"}}>
-                <Map
-                    defaultSettings={{
-                        width: 900, height: 600, defaultScale: 150, id: "SRBySexMap",
-                        showEmptyCountries: true, showFlatMap: props.showFlatMap,
-                    }}
+            <div style={{padding: "50px"}}>
+                <MultivariateMap
+                    defaultSettings={{width: 900, height: 600, defaultScale: 150, id: "SR_Depressive",
+                        showEmptyCountries: true, showFlatMap: props.showFlatMap}}
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}
                     maxSR={maxSR}
-                    mapTitle={`Suicide Rates of ${selectedSex}s in ${selectedYear}`}
-                    valueColName={selectedSex + "s"}
+                    mapTitle={`Suicide Rates?`}
+                    valueColName={"s"}
                     selectedColColName={"Gender"}
                     selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry}
                     rerenderVar={props.rerenderVar}
                 />
-                <br />
             </div>
+
         </>
     );
 }
 
-export default SR_By_Sex;
+export default SR_Depressive;

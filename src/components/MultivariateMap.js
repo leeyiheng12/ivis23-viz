@@ -200,9 +200,11 @@ function genSvg(
             svg.selectAll("path").attr("d", path);
         })
     );
+
+    
 }
 
-function Map(props) {
+function MultivariateMap(props) {
 
     // Settings
     const width = props.defaultSettings.width;
@@ -453,4 +455,4 @@ function Map(props) {
     )
 }
 
-export default Map;
+export default MultivariateMap;

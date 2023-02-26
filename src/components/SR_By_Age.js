@@ -84,7 +84,10 @@ function SR_By_Age(props) {
             <YearSelector minYear={minYear} maxYear={maxYear} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
             <div style={{"overflow": "auto"}}>
                 <Map
-                    defaultSettings={{width: 900, height: 600, defaultScale: 150, showEmptyCountries: true, showFlatMap: props.showFlatMap}}
+                    defaultSettings={{
+                        width: 900, height: 600, defaultScale: 150, id: "SRByAgeMap",
+                        showEmptyCountries: true, showFlatMap: props.showFlatMap,
+                    }}
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}
                     maxSR={maxSR}
