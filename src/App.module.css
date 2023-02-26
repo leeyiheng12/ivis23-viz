@@ -1,0 +1,22 @@
+.App {
+  text-align: center;
+  
+  /* overflow: hidden; */
+}
+
+
+.additionalInfo {
+  position: absolute;
+  /* float: right; */
+  right: 0%;
+  padding-top: 0.5%;
+  width: 5%;
+}
+
+@media screen and (max-width: 550px) {
+
+  div {
+    font-size: 8px;
+  }
+  
+}

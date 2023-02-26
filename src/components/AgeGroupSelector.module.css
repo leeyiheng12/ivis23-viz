@@ -1,0 +1,44 @@
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.barContainer, .textContainer {
+    display: flex;
+    position: relative;
+    /* height: 50%; */
+    line-height: 100%;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.barContainer {
+    height: 15px;    
+}
+
+
+.group, .textGroup {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.textGroup {
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding-top: 2px;
+    padding-bottom: 2px; 
+}
+
+.group {
+    background-color: grey;
+    opacity: 0.5;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.selected {
+    background-color: rgb(127, 201, 245);
+    opacity: 1;
+}
