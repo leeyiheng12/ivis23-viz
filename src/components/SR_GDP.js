@@ -76,8 +76,7 @@ function SR_GDP(props) {
                 offsetY={10}
                 style={tooltipStyle}
             >
-                Measured by the number of deaths from violence, including interpersonal violence,
-                conflict, terrorism, police conflict, and executions (per 100,000 people)
+                Gross Domestic Product of the country in USD, divided by the population of the country.
             </MouseTooltip>
 
 
