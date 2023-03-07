@@ -7,10 +7,10 @@
 
 .additionalInfo {
   position: absolute;
-  /* float: right; */
+  display: inline;
   right: 0%;
-  padding-top: 0.5%;
-  width: 5%;
+  width: 10%;
+  height: 62px;
 }
 
 @media screen and (max-width: 550px) {

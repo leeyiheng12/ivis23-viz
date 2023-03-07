@@ -58,23 +58,13 @@ class ColourDecider {
         return legendColor().scale(this.d3colorScale).title(title);
     }
 
-    setMaxSR(maxSR) {
+    setColorScale(colorScaleChunks) {
         // this.colorScaleChunks = split(0, maxSR, this.colorScale.length);
-        this.colorScaleChunks = [0, 7.5, 15, 30, 40, 60, 80, 100, 195.22];
-
-        this.d3colorScale = d3.scaleQuantize()
-            .domain([0, maxSR])
-            .range(this.colorScale);
+        this.colorScaleChunks = colorScaleChunks;
 
         this.d3colorScale = d3.scaleLinear()
             .domain(this.colorScaleChunks)
             .range(this.colorScale);
-
-            
-        // this.d3colorScale = d3.scaleQuantile()
-        // .domain(this.colorScaleChunks)
-        //     // .domain([0, maxSR])
-        // .range(this.colorScale);
 
     }
 
@@ -116,7 +106,7 @@ class ColourDecider {
 
         // If there is data, return scaled color. If there is no data, return the hidden color
         const relevantRow = this.getRowFromFilteredData(countryNameToCheck);
-        return relevantRow ? this.d3colorScale(+(relevantRow["SR"])) : this.hiddenColor;
+        return relevantRow ? this.d3colorScale(+(relevantRow[colName])) : this.hiddenColor;
         
     }
 }
@@ -136,6 +126,12 @@ function genSvg(
         .append("path")
         .attr("d", path);
 
+    // Translate and scale
+    const translate = projection.translate();
+    projection.translate([translate[0] - defaultSettings.leftTranslate, translate[1] + defaultSettings.topTranslate]);
+    svg.selectAll("path").attr("d", path);
+
+    
     // Get country on mouseover
     svg.on("mouseover", function(event) {
         const countryFeature = getCountryFeature(geoJSONdata, projection, event);
@@ -177,7 +173,6 @@ function genSvg(
                         translate[1] + event.dy
                     ]);
 
-
                 } else {
                     // Rotate the map
                     const rotate = projection.rotate();
@@ -194,12 +189,21 @@ function genSvg(
     );
 
     // Add scroll to zoom functionality
-    svg.call(
-        d3.zoom().on("zoom", (event) => {
-            projection.scale(defaultSettings.defaultScale * event.transform.k);
-            svg.selectAll("path").attr("d", path);
-        })
-    );
+    if (defaultSettings.showFlatMap) {
+        svg.call(
+            d3.zoom().on("zoom", (event) => {
+                projection.scale(defaultSettings.flatMapScale * event.transform.k);
+                svg.selectAll("path").attr("d", path);
+            })
+        );
+    } else {
+        svg.call(
+            d3.zoom().on("zoom", (event) => {
+                projection.scale(defaultSettings.globeMapScale * event.transform.k);
+                svg.selectAll("path").attr("d", path);
+            })
+        );
+    }
 }
 
 function Map(props) {
@@ -209,16 +213,14 @@ function Map(props) {
     const height = props.defaultSettings.height;
 
     const [colourDecider, _] = React.useState(new ColourDecider(
+        props.mapColors
         // ['#ffffd9','#edf8b1','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#253494','#081d58']
-        ['#f7fbff','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#08519c','#08306b']
+        // ['#f7fbff','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#08519c','#08306b']
     ));
 
     const mapVizRef = React.useRef();
 
-    const [localHoveredCountry, setLocalHoveredCountry] = React.useState("");
-
     const [countryColors, setCountryColors] = React.useState({});
-    const [prevCountryColors, setPrevCountryColors] = React.useState({});
 
     const [isMouseTooltipVisible, setIsMouseTooltipVisible] = React.useState(false);
 
@@ -230,7 +232,7 @@ function Map(props) {
         const newMapping = {};
         svg.selectAll("path").attr("fill", (d) => {
             countryName = d.properties.name;
-            countryColor = colourDecider.determineColor(countryName);
+            countryColor = colourDecider.determineColor(countryName, props.colorColName);
             newMapping[countryName] = countryColor;  // Update mapping
             return countryColor;
         });
@@ -248,16 +250,10 @@ function Map(props) {
             colourDecider.setHoveredCountry("");
             updateMapColours();
 
-            setLocalHoveredCountry("");
+            props.setHoveredCountry("");
             setIsMouseTooltipVisible(false);
             return;
         };
-
-        // Remember previous color of this country
-        const prevCountryColor = countryColors[countryName];
-        setPrevCountryColors(prevCountryColors => {
-            return {...prevCountryColors, [countryName]: prevCountryColor};
-        });
 
         // Set it to hover color
         setCountryColors(countryColors => {
@@ -268,7 +264,7 @@ function Map(props) {
         colourDecider.setHoveredCountry(countryName);
         updateMapColours();
 
-        setLocalHoveredCountry(countryName);
+        props.setHoveredCountry(countryName);
         setIsMouseTooltipVisible(true);
     
     }
@@ -307,14 +303,15 @@ function Map(props) {
             defaultCountryColors[country.properties.name] = colourDecider.defaultColor;
         }
         setCountryColors(defaultCountryColors);
-        setPrevCountryColors(defaultCountryColors);
 
         // Viz
         let projection;
         if (props.defaultSettings.showFlatMap) {
             projection = d3.geoNaturalEarth1();
+            projection.scale(props.defaultSettings.flatMapScale);
         } else {
             projection = d3.geoOrthographic();
+            projection.scale(props.defaultSettings.globeMapScale);
         }
 
         let path = d3.geoPath().projection(projection);
@@ -325,6 +322,10 @@ function Map(props) {
             geoJSONdata, countryHoverHandler, countryClickHandler,
             props.defaultSettings
         );
+        
+        // console.log("Map generated", props.defaultSettings.defaultScale);
+        // projection.scale(props.defaultSettings.defaultScale);
+        // svg.selectAll("path").attr("d", path);
 
         // add title
         svg.append("text")
@@ -344,7 +345,7 @@ function Map(props) {
             .attr("class", "legend")
             .attr("transform", `translate(10, 30)`)
             .call(
-                colourDecider.generateLegend("Suicide Rates / 100k")
+                colourDecider.generateLegend(props.legendTitle)
             );
 
         // Add event listener
@@ -371,11 +372,11 @@ function Map(props) {
 
     }, [props.rerenderVar, props.geoJSONdata, props.defaultSettings.showFlatMap]);
 
-    // When maxSR is calculated
+    // When colorScale is changed
     React.useEffect(() => {
-        colourDecider.setMaxSR(props.maxSR);
+        colourDecider.setColorScale(props.colorScaleChunks);
         updateMapColours();
-    }, [props.maxSR]);
+    }, [props.colorScaleChunks]);
 
     // When showEmptyCountries is toggled - change color of countries
     React.useEffect(() => {
@@ -423,9 +424,8 @@ function Map(props) {
     }
 
     const filteredCountryObject = Array.isArray(props.filteredData) && props.filteredData.length
-        ? (props.filteredData.find(d => d.country === localHoveredCountry))
+        ? (props.filteredData.find(d => d.country === props.hoveredCountry))
         : Object();
-
 
     return (
         <>
@@ -435,19 +435,29 @@ function Map(props) {
                 offsetY={10}
                 style={tooltipStyle}
             >
-                <p><b>{localHoveredCountry}</b></p>
-                <p style={{"padding": "0px", "margin": "0px"}}>{props.selectedColColName}:&nbsp;
-                    <b>{ filteredCountryObject ? filteredCountryObject[props.selectedColColName] : "No data"}</b>
-                </p>
-                <p style={{"padding": "0px", "margin": "0px"}}>Year:&nbsp;
-                    <b>{ filteredCountryObject ? filteredCountryObject["Year"] : "No data"}</b>
-                </p>
-                <p style={{"padding": "0px", "margin": "0px"}}>Suicides / 100k:&nbsp;
-                    <b>{ filteredCountryObject ? filteredCountryObject["SR"] : "No data"}</b>
-                </p>
+                <p><b>{props.hoveredCountry}</b></p>
+
+                {
+                    props.tooltipDetails.map((element, index) => {
+                        return (
+                            <p key={index} style={{"padding": "0px", "margin": "0px"}}>
+                                {element[1]}:&nbsp;
+                                <b>{ filteredCountryObject ? filteredCountryObject[element[0]] : "No data"}</b>
+                            </p>
+                        )
+                    })
+                }
+            
             </MouseTooltip>
-            <div id={props.defaultSettings.id} tabIndex="0">
+
+            <div id={props.defaultSettings.id}
+                tabIndex="0"
+                style={{
+                    display: "inline",
+                }}>
+
                 <svg ref={mapVizRef} width={width} height={height} />
+
             </div>
         </>
     )

@@ -4,11 +4,11 @@ import React from "react";
 import YearSelector from "./YearSelector";
 import DoubleLineChart from "./DoubleLineChart";
 import Map from "./Map";
-import SR_against_Depressive_Dataset from "../data/suicide-rates-vs-prevalence-of-depression.csv";
+import SR_against_Violent_Deaths_Dataset from "../data/suicide-vs-violent-deaths.csv";
 import MouseTooltip from 'react-sticky-mouse-tooltip';
 
 
-function SR_Depressive(props) {
+function SR_ViolentDeaths(props) {
 
     const [data, setData] = React.useState([]);
     const [filteredData, setFilteredData] = React.useState([]);
@@ -32,7 +32,7 @@ function SR_Depressive(props) {
 
     // On load
     React.useEffect(() => {
-        d3.csv(SR_against_Depressive_Dataset).then((d) => {
+        d3.csv(SR_against_Violent_Deaths_Dataset).then((d) => {
 
             setData(d);
             setSelectedYear(selectedYear - 1);  // Just to trigger the above change, non-manually
@@ -40,7 +40,7 @@ function SR_Depressive(props) {
             const uniqueYears = new Set();
             const uniqueSRs = new Set();
             for (let row of d) {
-                uniqueYears.add(+(row["Year"]))
+                uniqueYears.add(+(row["Year"]));
             }
             setMinYear(d3.min(uniqueYears));
             setMaxYear(d3.max(uniqueYears));
@@ -76,13 +76,15 @@ function SR_Depressive(props) {
                 offsetY={10}
                 style={tooltipStyle}
             >
-                Measured by the number of sufferers of depressive disorders (per 100,000 people)
+                Measured by the number of deaths from violence, including interpersonal violence,
+                conflict, terrorism, police conflict, and executions (per 100,000 people)
             </MouseTooltip>
+
 
             <h4>Comparison of Suicide Rate to {" "}
                 <span onMouseEnter={(e) => setIsMouseTooltipVisible(true)}
                     onMouseLeave={(e) => setIsMouseTooltipVisible(false)}>
-                        <u>Prevalence of Depression</u>
+                        <u>Prevalence of Violent Deaths</u>
                 </span> {" "}
                  {selectedCountry === "" ? "around the world" : "in " + selectedCountry}
             </h4>
@@ -95,19 +97,20 @@ function SR_Depressive(props) {
                             defaultSettings={{width: 900, height: 200}}
                             data={countrySpecificData}
                             col1="SR"
-                            col2="Prevalence of Depressive Disorders"
+                            col2="Violent Deaths"
                             yAxis1Name="Suicide Rate per 100,000 people"
-                            yAxis2Name="Rate of Depressive Disorders per 100,000 people"
-                            tooltipDetails={[["Year", "Year"], ["SR", "Suicides / 100k"], ["Prevalence of Depressive Disorders", "Prevalence of Depressive Disorders"]]}
+                            yAxis2Name="Rate of Violent Deaths per 100,000 people"
+                            tooltipDetails={[["Year", "Year"], ["SR", "Suicides / 100k"], ["Violent Deaths", "Violent Deaths"]]}
                             />
                     </>
                 )
             }
+            
             <YearSelector minYear={minYear} maxYear={maxYear} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
             <div style={{padding: "20px"}}>
 
                 <Map
-                    defaultSettings={{width: mapWidth, height: mapHeight, id: "SR_Depressive_SR",
+                    defaultSettings={{width: mapWidth, height: mapHeight, id: "SR_Violent_SR",
                         showEmptyCountries: true, showFlatMap: props.showFlatMap,
                         leftTranslate: 160, topTranslate: 0,
                         flatMapScale: flatMapScale, globeMapScale: globeMapScale
@@ -115,18 +118,18 @@ function SR_Depressive(props) {
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}
                     mapColors={['#ffffd9','#edf8b1','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#253494','#081d58']}
-                    colorScaleChunks={[0, 5, 10, 15, 20, 30, 50, 70, 90]}
+                    colorScaleChunks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90]}
                     colorColName="SR"
                     mapTitle={`Suicide Rates in ${selectedYear}`}
                     legendTitle="Suicides / 100k"
-                    tooltipDetails={[["Year", "Year"], ["SR", "Suicides / 100k"], ["Prevalence of Depressive Disorders", "Prevalence of Depressive Disorders"]]}
+                    tooltipDetails={[["Year", "Year"], ["SR", "Suicides / 100k"], ["Violent Deaths", "Violent Deaths"]]}
                     selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry}
                     hoveredCountry={hoveredCountry} setHoveredCountry={setHoveredCountry}
                     rerenderVar={props.rerenderVar}
                 />
 
                 <Map
-                    defaultSettings={{width: mapWidth, height: mapHeight, id: "SR_Depressive_PrevDD",
+                    defaultSettings={{width: mapWidth, height: mapHeight, id: "SR_Violent_ViolentDeaths",
                         showEmptyCountries: true, showFlatMap: props.showFlatMap,
                         leftTranslate: 160, topTranslate: 0,
                         flatMapScale: flatMapScale, globeMapScale: globeMapScale
@@ -134,11 +137,11 @@ function SR_Depressive(props) {
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}
                     mapColors={['#ffffd9','#edf8b1','#c7e9b4','#7fcdbb','#41b6c4','#1d91c0','#225ea8','#253494','#081d58']}
-                    colorScaleChunks={[0, 2000, 2600, 3000, 3400, 4400, 5000, 5600, 7000, 8000]}
-                    colorColName="Prevalence of Depressive Disorders"
-                    mapTitle={`Prevalence of Depressive Disorders in ${selectedYear}`}
-                    legendTitle="Sufferers of depressive disorders / 100k"
-                    tooltipDetails={[["Year", "Year"], ["SR", "Suicides / 100k"], ["Prevalence of Depressive Disorders", "Prevalence of Depressive Disorders"]]}
+                    colorScaleChunks={[0, 5, 10, 15, 20, 30, 50, 80, 100]}
+                    colorColName="Violent Deaths"
+                    mapTitle={`Violent Deaths in ${selectedYear}`}
+                    legendTitle="Number of violent deaths / 100k"
+                    tooltipDetails={[["Year", "Year"], ["SR", "Suicides / 100k"], ["Violent Deaths", "Violent Deaths"]]}
                     selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry}
                     hoveredCountry={hoveredCountry} setHoveredCountry={setHoveredCountry}
                     rerenderVar={props.rerenderVar}
@@ -149,4 +152,4 @@ function SR_Depressive(props) {
     );
 }
 
-export default SR_Depressive;
+export default SR_ViolentDeaths;

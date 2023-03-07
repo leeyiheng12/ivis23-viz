@@ -1,10 +1,10 @@
 import * as d3 from "d3";
 import React from "react";
-import styles from "./LineChart.module.css";
+// import styles from "./DoubleLineChart.module.css";
 
 import MouseTooltip from 'react-sticky-mouse-tooltip';
 
-function LineChart(props) {
+function DoubleLineChart(props) {
 
     const margin = {top: 10, right: 30, bottom: 30, left: 60};
     const width = props.defaultSettings.width - margin.left - margin.right;
@@ -16,10 +16,15 @@ function LineChart(props) {
     const [hoveredData, setHoveredData] = React.useState({});
     const [isMouseTooltipVisible, setIsMouseTooltipVisible] = React.useState(false);
 
-    const paddingTop = 30;
+    const paddingTop = 40;
     const paddingBottom = 60;
     const paddingLeft = 100;
     const paddingRight = 100;
+
+    const line1Color = "red";
+    const line2Color = "green";
+    const dots1Color = "black";
+    const dots2Color = "black";
 
     // Create line chart
     React.useEffect(() => {
@@ -29,8 +34,11 @@ function LineChart(props) {
         const data = props.data.filter((row) => row[props.selectedColColName] === props.selectedCol);
         const minYear = d3.min(data, (d) => +(d["Year"]));
         const maxYear = d3.max(data, (d) => +(d["Year"]));
-        const minSR = d3.min(data, (d) => +(d["SR"]));
-        const maxSR = d3.max(data, (d) => +(d["SR"]));
+
+        const minCol1 = d3.min(data, (d) => +(d[props.col1]));
+        const maxCol1 = d3.max(data, (d) => +(d[props.col1]));
+        const minCol2 = d3.min(data, (d) => +(d[props.col2]));
+        const maxCol2 = d3.max(data, (d) => +(d[props.col2]));
             
         const svg = d3.select(lineRef.current);
         svg.selectAll("*").remove();
@@ -58,31 +66,41 @@ function LineChart(props) {
             .text("Year")
             .attr("font-size", "12px");
 
-        const oneUnit = (maxSR - minSR) / 12;
-        const y = d3.scaleLinear()
-            .domain([Math.max(minSR - oneUnit, 0), maxSR + oneUnit])
+        const oneUnitY1 = (maxCol1 - minCol1) / 12;
+        const y1 = d3.scaleLinear()
+            .domain([Math.max(minCol1 - oneUnitY1, 0), maxCol1 + oneUnitY1])
             .range([height, 0]);
-
-        const yAxis = svg.append("g")
-            .call(d3.axisLeft(y))
-            .attr("transform", `translate(${paddingLeft}, ${paddingTop})`);
-
-        // const yAxisLabel = svg.append("text")
-        //     .attr("x", paddingLeft / 2)
-        //     .attr("y", (height + paddingTop + paddingBottom) / 2)
-        //     .style("text-anchor", "middle")
-        //     .text("Suicide Rate")
-        //     .attr("font-size", "14px");
-
-
-        const yAxisLabel = svg.append("text")
+        const yAxis1 = svg.append("g")
+            .call(d3.axisLeft(y1))
+            .attr("transform", `translate(${paddingLeft}, ${paddingTop})`)
+            .attr("stroke", line1Color)
+            .attr("stroke-width", 0.2);
+        const yAxis1Label = svg.append("text")
             .attr("transform", "rotate(-90)")
             .attr("x", -(height + paddingTop + paddingBottom) / 2)
             .attr("y", (paddingLeft) / 2)
             .style("text-anchor", "middle")
-            .text("Suicide Rate per 100,000 people")
-            .attr("font-size", "12px");
+            .text(props.yAxis1Name)
+            .attr("font-size", "12px")
+            .attr("fill", line1Color);
 
+        const oneUnitY2 = (maxCol2 - minCol2) / 12;
+        const y2 = d3.scaleLinear()
+            .domain([Math.max(minCol2 - oneUnitY2, 0), maxCol2 + oneUnitY2])
+            .range([height, 0]);
+        const yAxis2 = svg.append("g")
+            .call(d3.axisRight(y2))
+            .attr("transform", `translate(${width + paddingLeft}, ${paddingTop})`)
+            .attr("stroke", line2Color)
+            .attr("stroke-width", 0.2);
+        const yAxis2Label = svg.append("text")
+            .attr("transform", "rotate(90)")
+            .attr("x", (height + paddingTop + paddingBottom) / 2)
+            .attr("y", -(width + paddingLeft + 1.75 * paddingTop))
+            .style("text-anchor", "middle")
+            .text(props.yAxis2Name)
+            .attr("font-size", "12px")
+            .attr("fill", line2Color);
 
         // const line = svg.append("path")
         //     .datum(data)
@@ -101,12 +119,25 @@ function LineChart(props) {
             .datum(data)
             .attr("class", "line")
             .attr("fill", "none")
-            .attr("stroke", "steelblue")
+            .attr("stroke", line1Color)
             .attr("stroke-width", 1.5)
             .attr("transform", `translate(${paddingLeft}, ${paddingTop})`)
             .attr("d", d3.line()
               .x(d => x(+(d["Year"])))
-              .y(d => y(+(d["SR"])))
+              .y(d => y1(+(d[props.col1])))
+            );
+
+        const line2 = svg
+            .append("path")
+            .datum(data)
+            .attr("class", "line")
+            .attr("fill", "none")
+            .attr("stroke", line2Color)
+            .attr("stroke-width", 1.5)
+            .attr("transform", `translate(${paddingLeft}, ${paddingTop})`)
+            .attr("d", d3.line()
+              .x(d => x(+(d["Year"])))
+              .y(d => y2(+(d[props.col2])))
             );
 
         // For brush, const line. line = svg...
@@ -132,9 +163,21 @@ function LineChart(props) {
             .enter()
             .append("circle")
             .attr("cx", (d) => x(+(d["Year"])))
-            .attr("cy", (d) => y(+(d["SR"])))
-            .attr("r", 5)
-            .attr("fill", "steelblue")
+            .attr("cy", (d) => y1(+(d[props.col1])))
+            .attr("r", 3)
+            .attr("fill", dots1Color)
+            .attr("transform", `translate(${paddingLeft}, ${paddingTop})`)
+            .on("mouseover", mouseover)
+            .on("mouseleave", mouseleave);
+
+        svg.selectAll("dot")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", (d) => x(+(d["Year"])))
+            .attr("cy", (d) => y2(+(d[props.col2])))
+            .attr("r", 3)
+            .attr("fill", dots2Color)
             .attr("transform", `translate(${paddingLeft}, ${paddingTop})`)
             .on("mouseover", mouseover)
             .on("mouseleave", mouseleave);
@@ -188,7 +231,7 @@ function LineChart(props) {
                 .duration(1000)
                 .attr("d", d3.line()
                     .x(d => x(+(d["Year"])))
-                    .y(d => y(+(d["SR"])))
+                    .y(d => y1(+(d[props.col1])))
                 );
         
             // Update dots
@@ -198,7 +241,7 @@ function LineChart(props) {
                 .call((circle) => {
                     circle
                         .attr("cx", (d) => x(+(d["Year"])))
-                        .attr("cy", (d) => y(+(d["SR"])));
+                        .attr("cy", (d) => y1(+(d[props.col1])));
                 });
 
             // If user double click, reinitialize the chart
@@ -213,7 +256,7 @@ function LineChart(props) {
                     .call((circle) => {
                         circle
                             .attr("cx", (d) => x(+(d["Year"])))
-                            .attr("cy", (d) => y(+(d["SR"])));
+                            .attr("cy", (d) => y1(+(d[props.col1])));
                     });
 
                 line
@@ -221,7 +264,7 @@ function LineChart(props) {
                 .transition()
                 .attr("d", d3.line()
                     .x(d => x(+(d["Year"])))
-                    .y(d => y(+(d["SR"])))
+                    .y(d => y1(+(d[props.col1])))
                 )
             });
 
@@ -252,9 +295,22 @@ function LineChart(props) {
                     style={tooltipStyle}
                 >
                     <p>Country: <b>{hoveredData["country"]}</b></p>
-                    <p style={{"padding": "0px", "margin": "0px"}}>{props.selectedColColName}: <b>{hoveredData[props.selectedColColName]}</b></p>
-                    <p style={{"padding": "0px", "margin": "0px"}}>Year: <b>{hoveredData["Year"]}</b></p>
-                    <p style={{"padding": "0px", "margin": "0px"}}>Suicides / 100k: <b>{hoveredData["SR"]}</b></p>
+
+                    {
+                        console.log(props.tooltipDetails)
+                    }
+
+                    {
+                        props.tooltipDetails && props.tooltipDetails.map((element, index) => {
+                            return (
+                                <p key={index} style={{"padding": "0px", "margin": "0px"}}>
+                                    {element[1]}:&nbsp;
+                                    <b>{ hoveredData ? hoveredData[element[0]] : "No data"}</b>
+                                </p>
+                            )
+                        })
+                    }
+                
                 </MouseTooltip>
             }
 
@@ -262,4 +318,4 @@ function LineChart(props) {
     )
 }
 
-export default LineChart;
+export default DoubleLineChart;
