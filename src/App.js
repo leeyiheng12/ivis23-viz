@@ -27,8 +27,8 @@ function App() {
   const [geoJSONdata, setGeoJSONdata] = React.useState({});
 
   const [infoModalIsOpen, setInfoModalIsOpen] = React.useState(false);
-  const [helpModalIsOpen, setHelpModalIsOpen] = React.useState(false);
-  const [showFlatMap, setShowFlatMap] = React.useState(true);
+  const [helpModalIsOpen, setHelpModalIsOpen] = React.useState(true);
+  const [showFlatMap, setShowFlatMap] = React.useState(false);
 
   React.useEffect(() => {
       // Load geoJSON data
@@ -63,7 +63,7 @@ function App() {
         </div>
 
         {/* <br /> */}
-        <Tabs forceRenderTabPanel={true} onSelect={() => forceRerender(rerenderVar + 1)} defaultIndex={4}>
+        <Tabs forceRenderTabPanel={true} onSelect={() => forceRerender(rerenderVar + 1)} defaultIndex={0}>
           <TabList>
             <Tab>Suicide Rates by Gender</Tab>
             <Tab>Suicide Rates by Age Group</Tab>
