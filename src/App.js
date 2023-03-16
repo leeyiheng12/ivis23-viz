@@ -165,8 +165,20 @@ function App() {
 
       <Modal show={peopleModalIsOpen} onHide={() => setPeopleModalIsOpen(false)} dialogClassName="modal-50w">
         <Modal.Body>
-          <h3>People</h3>
+          <h3>About This Project (<a href="https://github.com/leeyiheng12/ivis23-viz" target="_blank">Github Link</a>)</h3>
             <hr />
+            <p>
+              This project seeks to visualize publicly available datasets on suicide rates, in an attempt to present these
+              information in an easily interpretable and understandable format. We aim to simply present the information
+              we have, and allow users to explore and interact with the data.
+            </p>
+            <p>
+              Through this project, our objective is to apply the concepts regarding information visualization in a
+              practical setting, and to produce an interactive visualization that allows the user to effectively
+              absorb the information that we seek to share.
+            </p>
+            <hr />
+            <h3>Who are we?</h3>
             <p><b>Lee Yi Heng</b></p>
             <ul>
               <li>Backend Development</li>
