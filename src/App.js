@@ -9,7 +9,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 import Modal from "react-bootstrap/Modal";
-import { BsInfoCircle, BsQuestionCircle } from "react-icons/bs";
+import { BsInfoCircle, BsPeople, BsQuestionCircle } from "react-icons/bs";
 import Button from "react-bootstrap/Button";
 
 import SR_By_Age from "./components/SR_By_Age";
@@ -28,6 +28,7 @@ function App() {
 
   const [infoModalIsOpen, setInfoModalIsOpen] = React.useState(false);
   const [helpModalIsOpen, setHelpModalIsOpen] = React.useState(true);
+  const [peopleModalIsOpen, setPeopleModalIsOpen] = React.useState(false);
   const [showFlatMap, setShowFlatMap] = React.useState(false);
 
   React.useEffect(() => {
@@ -60,6 +61,8 @@ function App() {
           <BsQuestionCircle size={20} onClick={() => setHelpModalIsOpen(true)} />
           &nbsp;
           <BsInfoCircle size={20} onClick={() => setInfoModalIsOpen(true)} />
+          &nbsp;
+          <BsPeople size={20} onClick={() => setPeopleModalIsOpen(true)} />
         </div>
 
         {/* <br /> */}
@@ -156,6 +159,42 @@ function App() {
             <video className={styles.video} autoPlay="autoplay" controls>
               <source src="demo_video.webm" type="video/webm" />
             </video>
+        </Modal.Body>
+      </Modal>
+
+
+      <Modal show={peopleModalIsOpen} onHide={() => setPeopleModalIsOpen(false)} dialogClassName="modal-50w">
+        <Modal.Body>
+          <h3>People</h3>
+            <hr />
+            <p><b>Lee Yi Heng</b></p>
+            <ul>
+              <li>Backend Development</li>
+              <li>Frontend Development</li>
+              <li>Design</li>
+            </ul>
+
+            <p><b>Amanda Cheng</b></p>
+            <ul>
+              <li>Frontend Development</li>
+              <li>Testing</li>
+              <li>Design</li>
+            </ul>
+
+            <p><b>Megan Chen Peralta</b></p>
+            <ul>
+              <li>Backend Development</li>
+              <li>Data Analysis</li>
+              <li>Design</li>
+            </ul>
+
+            <p><b>Jie Che</b></p>
+            <ul>
+              <li>Data Analysis</li>
+              <li>Testing</li>
+              <li>Design</li>
+            </ul>
+
         </Modal.Body>
       </Modal>
     </>
