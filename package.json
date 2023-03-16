@@ -44,5 +44,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
+  },
+  "homepage": "https://leeyiheng12.github.io/ivis23-viz",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -b gh-deploy -d build"
 }
