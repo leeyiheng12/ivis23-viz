@@ -92,7 +92,7 @@ function SR_Depressive(props) {
                     <>
                     <br />
                         <DoubleLineChart
-                            defaultSettings={{width: 900, height: 200}}
+                            defaultSettings={{width: 900, height: 300}}
                             data={countrySpecificData}
                             col1="SR"
                             col2="Prevalence of Depressive Disorders"
@@ -110,7 +110,7 @@ function SR_Depressive(props) {
                     defaultSettings={{width: mapWidth, height: mapHeight, id: "SR_Depressive_SR",
                         showEmptyCountries: true, showFlatMap: props.showFlatMap,
                         leftTranslate: 160, topTranslate: 0,
-                        flatMapScale: flatMapScale, globeMapScale: globeMapScale
+                        flatMapScale: flatMapScale, globeMapScale: globeMapScale,
                     }}
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}
@@ -129,7 +129,7 @@ function SR_Depressive(props) {
                     defaultSettings={{width: mapWidth, height: mapHeight, id: "SR_Depressive_PrevDD",
                         showEmptyCountries: true, showFlatMap: props.showFlatMap,
                         leftTranslate: 160, topTranslate: 0,
-                        flatMapScale: flatMapScale, globeMapScale: globeMapScale
+                        flatMapScale: flatMapScale, globeMapScale: globeMapScale,
                     }}
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}

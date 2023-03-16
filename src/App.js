@@ -63,7 +63,7 @@ function App() {
         </div>
 
         {/* <br /> */}
-        <Tabs forceRenderTabPanel={true} onSelect={() => forceRerender(rerenderVar + 1)} defaultIndex={0}>
+        <Tabs forceRenderTabPanel={true} onSelect={() => forceRerender(rerenderVar + 1)} defaultIndex={0}>  
           <TabList>
             <Tab>Suicide Rates by Gender</Tab>
             <Tab>Suicide Rates by Age Group</Tab>
@@ -145,11 +145,17 @@ function App() {
             <p><u>Scroll</u> using the mouse wheel to <u>zoom in/out</u>.</p>
             <p style={{"marginTop": "0", "paddingTop": "0"}}><u>Click</u> on the map, then use the <u>arrow keys</u> to <u>move</u> the map/globe around.</p>
             <p style={{"marginTop": "0", "paddingTop": "0"}}><u>Click on a country</u> to view more information, then <u>click an empty region</u> on the map/globe to unselect the country.</p>
-            {/* <p style={{"marginTop": "0", "paddingTop": "0"}}>After zooming into a section of the line chart, double click the chart to zoom back out.</p> */}
-            
+
             <hr />
 
             <p>Click on the question mark icon in the top right corner to reopen this help menu.</p>
+
+            <hr />
+
+            <b>Demo Video</b>
+            <video className={styles.video} autoPlay="autoplay" controls>
+              <source src="demo_video.webm" type="video/webm" />
+            </video>
         </Modal.Body>
       </Modal>
     </>

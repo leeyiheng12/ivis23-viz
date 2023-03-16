@@ -416,6 +416,30 @@ function Map(props) {
 
     }, [countryColors]);
 
+
+    // When another map rotates or translates
+    // React.useEffect(() => {
+    //     const svg = d3.select(mapVizRef.current);
+        
+
+
+    //     const translate = projection.translate();
+    //     projection.translate([
+    //         translate[0] + props.defaultSettings.amountToTranslate[0],
+    //         translate[1] + props.defaultSettings.amountToTranslate[1],
+    //     ]);
+    // }, [props.defaultSettings.amountToTranslate]);
+
+    // React.useEffect(() => {
+    //     const rotate = projection.rotate();
+    //     projection.rotate([
+    //         rotate[0] + props.defaultSettings.amountToRotate[0],
+    //         rotate[1] + props.defaultSettings.amountToRotate[1],
+    //     ]);
+    // }, [props.defaultSettings.amountToRotate]);
+
+
+
     const tooltipStyle = {
         "backgroundColor": "white",
         "border": "1px solid blue",

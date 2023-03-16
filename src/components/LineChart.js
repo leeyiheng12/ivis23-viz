@@ -58,6 +58,26 @@ function LineChart(props) {
             .text("Year")
             .attr("font-size", "12px");
 
+
+        // Add square
+
+        const widthProportion = 0.8;
+        const legendFontSize = 12;
+
+        const square1 = svg.append("rect")
+            .attr("x", paddingLeft + widthProportion * width)
+            .attr("y",  paddingTop - 10)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", "steelblue");
+
+        const legend1 = svg.append("text")
+            .attr("x", paddingLeft + widthProportion * width + 15)
+            .attr("y",  paddingTop)
+            .text("Suicides per 100,000 people")
+            .attr("font-size", `${legendFontSize}px`)
+            .attr("fill", "steelblue");
+
         const oneUnit = (maxSR - minSR) / 12;
         const y = d3.scaleLinear()
             .domain([Math.max(minSR - oneUnit, 0), maxSR + oneUnit])

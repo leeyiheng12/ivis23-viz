@@ -93,7 +93,7 @@ function SR_GDP(props) {
                     <>
                     <br />
                         <DoubleLineChart
-                            defaultSettings={{width: 900, height: 200}}
+                            defaultSettings={{width: 900, height: 300}}
                             data={countrySpecificData}
                             col1="SR"
                             col2="GDP per capita"
@@ -112,7 +112,7 @@ function SR_GDP(props) {
                     defaultSettings={{width: mapWidth, height: mapHeight, id: "SR_GDP_SR",
                         showEmptyCountries: true, showFlatMap: props.showFlatMap,
                         leftTranslate: 160, topTranslate: 0,
-                        flatMapScale: flatMapScale, globeMapScale: globeMapScale
+                        flatMapScale: flatMapScale, globeMapScale: globeMapScale,
                     }}
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}
@@ -131,7 +131,7 @@ function SR_GDP(props) {
                     defaultSettings={{width: mapWidth, height: mapHeight, id: "SR_GDP_GDP",
                         showEmptyCountries: true, showFlatMap: props.showFlatMap,
                         leftTranslate: 160, topTranslate: 0,
-                        flatMapScale: flatMapScale, globeMapScale: globeMapScale
+                        flatMapScale: flatMapScale, globeMapScale: globeMapScale,
                     }}
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}

@@ -82,7 +82,7 @@ function SR_By_Age(props) {
                         width: 900, height: 600, defaultScale: 150, id: "SRByAgeMap",
                         showEmptyCountries: true, showFlatMap: props.showFlatMap,
                         leftTranslate: 0, topTranslate: 0,
-                        flatMapScale: flatMapScale, globeMapScale: globeMapScale
+                        flatMapScale: flatMapScale, globeMapScale: globeMapScale,
                     }}
                     geoJSONdata={props.geoJSONdata}
                     filteredData={filteredData}

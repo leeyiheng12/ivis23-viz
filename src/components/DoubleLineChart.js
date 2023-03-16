@@ -140,6 +140,41 @@ function DoubleLineChart(props) {
               .y(d => y2(+(d[props.col2])))
             );
 
+
+        // Add title
+
+        // Add square
+        const widthProportion = 0.63;
+        const legendFontSize = 12;
+
+        const square1 = svg.append("rect")
+            .attr("x", paddingLeft + widthProportion * width)
+            .attr("y",  paddingTop - 10)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", line1Color);
+
+        const legend1 = svg.append("text")
+            .attr("x", paddingLeft + widthProportion * width + 15)
+            .attr("y",  paddingTop)
+            .text(props.yAxis1Name)
+            .attr("font-size", `${legendFontSize}px`)
+            .attr("fill", line1Color);
+
+        const square2 = svg.append("rect")
+            .attr("x", paddingLeft + widthProportion * width)
+            .attr("y",  paddingTop + 15)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", line2Color);
+
+        const legend2 = svg.append("text")
+            .attr("x", paddingLeft + widthProportion * width + 15)
+            .attr("y",  paddingTop + 25)
+            .text(props.yAxis2Name)
+            .attr("font-size", `${legendFontSize}px`)
+            .attr("fill", line2Color);
+
         // For brush, const line. line = svg...
         
         // xAxis.selectAll("text").filter((d, i) => i === 0).remove();
