@@ -173,34 +173,59 @@ function App() {
               we have, and allow users to explore and interact with the data.
             </p>
             <p>
-              Through this project, our objective is to apply the concepts regarding information visualization in a
+              Through this project, we aim to apply the concepts regarding information visualization in a
               practical setting, and to produce an interactive visualization that allows the user to effectively
               absorb the information that we seek to share.
             </p>
+            <p>
+              Learning objectives reached:
+              <ul>
+                <li>
+                  <b>Teamwork</b>: After completing this project, and having gone through the necessary discussions,
+                   all of us were better communicators and collaborators.
+                </li>
+                <li>
+                  <b>Design</b>: After this project, all of us were more equipped when it comes to designing a good
+                  visualization, and were able to better understand the importance of good design.
+                </li>
+                <li>
+                  <b>Programming</b>: After this project, all of us were more familiar with the React framework, and
+                  the D3.js library.
+                </li>
+                <li>
+                  <b>Research</b>: After this project, all of us were more familiar with the process of researching
+                  and analyzing data, and were able to better understand the importance of data analysis.
+                </li>
+              </ul>
+            </p>
             <hr />
             <h3>Who are we?</h3>
-            <p><b>Lee Yi Heng</b></p>
+            <p><b>Lee Yi Heng</b>: in charge of coding of the visualizations.</p>
+            <p>Contributions:</p>
             <ul>
               <li>Backend Development</li>
               <li>Frontend Development</li>
               <li>Design</li>
             </ul>
 
-            <p><b>Amanda Cheng</b></p>
+            <p><b>Amanda Cheng</b>: in charge of designing of the visualizations.</p>
+            <p>Contributions:</p>
             <ul>
               <li>Frontend Development</li>
               <li>Testing</li>
               <li>Design</li>
             </ul>
 
-            <p><b>Megan Chen Peralta</b></p>
+            <p><b>Megan Chen Peralta</b>: in charge of designing of the visualizations.</p>
+            <p>Contributions:</p>
             <ul>
               <li>Backend Development</li>
               <li>Data Analysis</li>
               <li>Design</li>
             </ul>
 
-            <p><b>Jie Che</b></p>
+            <p><b>Jie Che</b>: in charge of organizing the team and the project.</p>
+            <p>Contributions:</p>
             <ul>
               <li>Data Analysis</li>
               <li>Testing</li>
